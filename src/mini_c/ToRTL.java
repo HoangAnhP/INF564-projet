@@ -142,13 +142,29 @@ public class ToRTL extends EmptyVisitor {
 	public void visit(Sblock n) {
 	}
 
+	@Override
 	public void visit(Sreturn n) {
+		this.l = this.rtlFun.exit;
+		this.r = this.rtlFun.result;
+		visit(n.e);
 	}
 
+	@Override
 	public void visit(Decl_fun n) {
+		
 	}
 
+	@Override
 	public void visit(File n) {
+		this.rtlFile = new RTLfile();
+		int i;
+		for(i = 0; i < n.funs.size(); i++) {
+			Decl_fun func = n.funs.get(i);
+			func.accept(this);
+			this.rtlFile.funs.add(this.rtlFun);
+			this.var_reg = new HashMap<>();
+			this.arg_reg = new HashMap<>();
+		}
 	}
 }
  
